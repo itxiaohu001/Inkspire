@@ -55,10 +55,10 @@ func (uc *UserController) Register(c *gin.Context) {
 		return
 	}
 	if err := uc.userService.RegisterUser(&req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, errors.ErrUserAuthFailed)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "注册成功"})
+	c.JSON(http.StatusOK, &dto.SuccessBasic)
 }
 
 // GetUser 获取用户信息
@@ -67,7 +67,7 @@ func (uc *UserController) GetUser(c *gin.Context) {
 	userID, _ := strconv.ParseUint(id, 10, 64)
 	response, err := uc.userService.GetUserResponse(uint(userID))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "用户不存在"})
+		c.JSON(http.StatusNotFound, errors.ErrUserNotFound)
 		return
 	}
 	c.JSON(http.StatusOK, response)
