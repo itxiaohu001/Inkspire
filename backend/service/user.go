@@ -65,9 +65,29 @@ func (service *UserService) GetUserResponse(id uint) (*dto.UserResponse, error) 
 		return nil, fmt.Errorf("用户不存在或用户名错误")
 	}
 	return &dto.UserResponse{
-		ID:       user.ID,
-		Username: user.Username,
-		Email:    user.Email,
-		Role:     user.Role,
+		Data: dto.UserBasic{
+			ID:       user.ID,
+			Username: user.Username,
+			Email:    user.Email,
+			Role:     user.Role,
+		},
 	}, nil
+}
+
+func (service *UserService) GetUserListResponse(page int, limit int) (*dto.UsersResponse, error) {
+	offset := (page - 1) * limit
+	users, err := service.userDAO.GetUsersWithPagination(offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	usersResponse := new(dto.UsersResponse)
+	for _, user := range users {
+		usersResponse.Data = append(usersResponse.Data, dto.UserBasic{
+			ID:       user.ID,
+			Username: user.Username,
+			Email:    user.Email,
+			Role:     user.Role,
+		})
+	}
+	return usersResponse, nil
 }

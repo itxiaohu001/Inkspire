@@ -5,9 +5,10 @@ import (
 	"Inkspire/errors"
 	"Inkspire/service"
 	"Inkspire/utils"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserController struct {
@@ -47,6 +48,11 @@ func (uc *UserController) Login(c *gin.Context) {
 	})
 }
 
+// Logout 退出登录
+func (uc *UserController) Logout(c *gin.Context) {
+	c.JSON(http.StatusOK, &dto.SuccessBasic)
+}
+
 // Register 用户注册
 func (uc *UserController) Register(c *gin.Context) {
 	var req dto.RegisterRequest
@@ -70,5 +76,19 @@ func (uc *UserController) GetUser(c *gin.Context) {
 		c.JSON(http.StatusNotFound, errors.ErrUserNotFound)
 		return
 	}
+	response.Basic = dto.SuccessBasic
 	c.JSON(http.StatusOK, response)
+}
+
+// GetUserList 获取用户列表
+func (uc *UserController) GetUserList(c *gin.Context) {
+	page, _ := strconv.Atoi(c.Query("page"))
+	limit, _ := strconv.Atoi(c.Query("limit"))
+	usersResponse, err := uc.userService.GetUserListResponse(page, limit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errors.ErrInternalServerError)
+		return
+	}
+	usersResponse.Basic = dto.SuccessBasic
+	c.JSON(http.StatusOK, usersResponse)
 }

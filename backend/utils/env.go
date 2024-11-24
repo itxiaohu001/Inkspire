@@ -1,8 +1,9 @@
 package utils
 
 import (
-	"github.com/joho/godotenv"
 	"log"
+
+	"github.com/joho/godotenv"
 )
 
 func init() {
@@ -11,19 +12,25 @@ func init() {
 		log.Fatal(err)
 	}
 
+	SERVER_PORT = myEnv["SERVER_PORT"]
+
 	DB_HOST = myEnv["DB_HOST"]
 	DB_PORT = myEnv["DB_PORT"]
 	DB_USER = myEnv["DB_USER"]
 	DB_PASS = myEnv["DB_PASS"]
+	DB_DATABASE = myEnv["DB_DATABASE"]
 
 	JWT_SECRET = myEnv["JWT_SECRET"]
 }
 
 var (
-	DB_HOST = ""
-	DB_PORT = ""
-	DB_USER = ""
-	DB_PASS = ""
+	SERVER_PORT string
 
-	JWT_SECRET = ""
+	DB_HOST     string
+	DB_PORT     string
+	DB_USER     string
+	DB_PASS     string
+	DB_DATABASE string
+
+	JWT_SECRET string
 )

@@ -1,8 +1,10 @@
 package utils
 
 import (
-	"github.com/golang-jwt/jwt"
+	"sync"
 	"time"
+
+	"github.com/golang-jwt/jwt"
 )
 
 // JWTSecret 是加密签名的密钥
@@ -54,4 +56,23 @@ func VerifyToken(tokenString string) (*Claims, error) {
 	}
 
 	return claims, nil
+}
+
+// Blacklist is a map to store revoked tokens.
+var Blacklist = make(map[string]struct{})
+var blacklistMutex sync.Mutex
+
+// AddToBlacklist adds a token to the blacklist.
+func AddToBlacklist(token string) {
+	blacklistMutex.Lock()
+	defer blacklistMutex.Unlock()
+	Blacklist[token] = struct{}{}
+}
+
+// IsTokenRevoked checks if a token is in the blacklist.
+func IsTokenRevoked(token string) bool {
+	blacklistMutex.Lock()
+	defer blacklistMutex.Unlock()
+	_, exists := Blacklist[token]
+	return exists
 }

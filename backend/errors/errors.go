@@ -4,7 +4,7 @@ package errors
 
 import "fmt"
 
-// 定义错误结构体，包含错误码和错误信息
+// CustomError 定义错误结构体，包含错误码和错误信息
 type CustomError struct {
 	Code    int    // 错误码
 	Message string // 错误消息

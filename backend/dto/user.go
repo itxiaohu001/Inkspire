@@ -19,11 +19,20 @@ type LoginResponse struct {
 	Token string `json:"token"`
 }
 
-// UserResponse 用户信息响应结构
-type UserResponse struct {
-	Basic
+type UserBasic struct {
 	ID       uint   `json:"id"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Role     string `json:"role"`
+}
+
+// UserResponse 用户信息响应结构
+type UserResponse struct {
+	Basic
+	Data UserBasic `json:"data"`
+}
+
+type UsersResponse struct {
+	Basic
+	Data []UserBasic `json:"data"`
 }
