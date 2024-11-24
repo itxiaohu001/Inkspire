@@ -6,7 +6,7 @@ import (
 )
 
 // JWTSecret 是加密签名的密钥
-var JWTSecret = []byte("pjfs-df#4216")
+var JWTSecret = []byte(JWT_SECRET)
 
 // Claims 定义了我们要包含在 JWT 中的数据
 type Claims struct {
