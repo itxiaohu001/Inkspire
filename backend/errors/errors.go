@@ -6,8 +6,8 @@ import "fmt"
 
 // CustomError 定义错误结构体，包含错误码和错误信息
 type CustomError struct {
-	Code    int    // 错误码
-	Message string // 错误消息
+	Code    int    `json:"code"`    // 错误码
+	Message string `json:"message"` // 错误消息
 }
 
 func (e *CustomError) Error() string {
