@@ -2,28 +2,25 @@ package routers
 
 import (
 	"Inkspire/controllers"
-	"Inkspire/middlewares"
-
 	"github.com/gin-gonic/gin"
 )
 
-type UserRouters struct {
+type UserRouter struct {
 	uc *controllers.UserController
 }
 
-func NewUserRouters(uc *controllers.UserController) *UserRouters {
-	return &UserRouters{uc: uc}
+func NewUserRouter(uc *controllers.UserController) *UserRouter {
+	return &UserRouter{uc: uc}
 }
 
-func (ur *UserRouters) Init(router *gin.RouterGroup) {
-	userGroup := router.Group("user")
+func (ur *UserRouter) Init(public, private *gin.RouterGroup) {
+	userPublic := public.Group("user")
+	userPrivate := private.Group("user")
 	{
-		userGroup.POST("login", ur.uc.Login)
+		userPublic.POST("login", ur.uc.Login)
 	}
 	{
-		needToken := userGroup
-		needToken.Use(middlewares.AuthMiddleware())
-		needToken.GET("list", ur.uc.GetUserList)
-		needToken.POST("register", ur.uc.Register)
+		userPrivate.GET("list", ur.uc.GetUserList)
+		userPrivate.POST("register", ur.uc.Register)
 	}
 }
